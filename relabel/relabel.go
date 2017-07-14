@@ -49,6 +49,10 @@ func relabel(labels model.LabelSet, cfg *config.RelabelConfig) model.LabelSet {
 		if cfg.Regex.MatchString(val) {
 			return nil
 		}
+	case config.RelabelEqual:
+		if string(labels[cfg.EqualLabel])!= val {
+			return nil
+		}
 	case config.RelabelKeep:
 		if !cfg.Regex.MatchString(val) {
 			return nil

@@ -1167,6 +1167,8 @@ const (
 	RelabelReplace RelabelAction = "replace"
 	// RelabelKeep drops targets for which the input does not match the regex.
 	RelabelKeep RelabelAction = "keep"
+	RelabelEqual RelabelAction = "equal"
+
 	// RelabelDrop drops targets for which the input does match the regex.
 	RelabelDrop RelabelAction = "drop"
 	// RelabelHashMod sets a label to the modulus of a hash of labels.
@@ -1186,7 +1188,7 @@ func (a *RelabelAction) UnmarshalYAML(unmarshal func(interface{}) error) error {
 		return err
 	}
 	switch act := RelabelAction(strings.ToLower(s)); act {
-	case RelabelReplace, RelabelKeep, RelabelDrop, RelabelHashMod, RelabelLabelMap, RelabelLabelDrop, RelabelLabelKeep:
+	case RelabelReplace, RelabelKeep, RelabelDrop, RelabelHashMod, RelabelLabelMap, RelabelLabelDrop, RelabelLabelKeep, RelabelEqual:
 		*a = act
 		return nil
 	}
@@ -1211,6 +1213,8 @@ type RelabelConfig struct {
 	Replacement string `yaml:"replacement,omitempty"`
 	// Action is the action to be performed for the relabeling.
 	Action RelabelAction `yaml:"action,omitempty"`
+
+	EqualLabel model.LabelName `yaml:"equal_label,omitempty"`
 
 	// Catches all undefined fields and must be empty after parsing.
 	XXX map[string]interface{} `yaml:",inline"`
